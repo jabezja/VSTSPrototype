@@ -1,0 +1,102 @@
+import static org.junit.Assert.*;
+
+import java.io.File;
+import java.util.concurrent.TimeUnit;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxBinary;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
+
+/*
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.markuputils.ExtentColor;
+import com.aventstack.extentreports.markuputils.MarkupHelper;
+import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
+import com.aventstack.extentreports.reporter.configuration.ChartLocation;
+import com.aventstack.extentreports.reporter.configuration.Theme;
+*/
+
+public class GO_Booking {
+	
+	private WebDriver driver;
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		
+		/*System.setProperty("webdriver.gecko.driver","C:\\Drivers\\geckodriver\\geckodriver.exe");
+		FirefoxProfile testProfile = new FirefoxProfile();
+        testProfile.setAcceptUntrustedCertificates(true);
+
+        FirefoxBinary ffBinary = new FirefoxBinary(new File("C:\\Program Files\\Mozilla Firefox\\firefox.exe"));
+        testProfile.setPreference("dom.file.createInChild", true);
+		DesiredCapabilities capabilities = DesiredCapabilities.firefox();
+		capabilities.setCapability(FirefoxDriver.PROFILE, testProfile);
+		capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+		//capabilities.setCapability("marionette", false);
+		driver = new FirefoxDriver(capabilities);
+		//driver=new FirefoxDriver(Capabilities);
+		//driver = new FirefoxDriver(); 
+		 */
+		
+		driver = new ChromeDriver();
+	    String baseUrl = "www.harvester.co.uk";
+	    String expectedTitle = "Harvester Restaurants.*";
+	    
+	    driver.get(baseUrl);
+	    
+	    checkPageIsReady();
+	    System.out.println("Navigated to webpage "+ driver.getCurrentUrl());
+
+	    final JavascriptExecutor js = (JavascriptExecutor) driver;
+	    // time of the process of navigation and page load
+	    double loadTime = (Double) js.executeScript(
+	        "return (window.performance.timing.loadEventEnd - window.performance.timing.navigationStart) / 1000");
+	    System.out.print("Timetaken for the homepage to load");
+	    System.out.println(loadTime + " seconds");
+	    
+	    
+	    driver.manage().window().maximize();
+	    driver.manage().timeouts().implicitlyWait(25, TimeUnit.SECONDS);
+	    String actualTitle = driver.getTitle();
+	    System.out.println("Title : "+ actualTitle);
+	  
+	    /*
+	    if (actualTitle.contentEquals(expectedTitle)){
+	    	
+            System.out.println("Setup Passed!");
+    		logger.log(Status.PASS, MarkupHelper.createLabel("Harvester HomePage is sucessfully loaded with title: " + actualTitle , ExtentColor.GREEN));
+    		} 
+	    else 
+           {
+            System.out.println("Setup Failed");
+            System.out.println(actualTitle);
+            logger.log(Status.FAIL, MarkupHelper.createLabel("Harvester HomePage is not loaded, current title is " + actualTitle , ExtentColor.RED));
+        }
+        */
+		
+	}
+	 public void checkPageIsReady() {
+		  
+		  JavascriptExecutor js = (JavascriptExecutor)driver;
+		  
+		  
+		  //Initially bellow given if condition will check ready state of page.
+		  if (js.executeScript("return document.readyState").toString().equals("complete")){ 
+		   System.out.println("Page Is loaded.");}
+	 } 
+
+	@Test
+	public void test() {
+		fail("Not yet implemented");
+	}
+
+}
